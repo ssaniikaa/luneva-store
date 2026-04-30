@@ -1,8 +1,8 @@
 import express from "express";
 import Order from "../models/Order.js";
 import {
-  createRazorpayOrder,
-  verifyRazorpayPayment
+  createrazorPayOrder,
+  verifyrazorPayPayment
 } from "../services/razorPayService.js";
 import {
   createShiprocketOrder,
@@ -13,7 +13,7 @@ import { sendInvoiceEmail } from "../services/emailService.js";
 
 const router = express.Router();
 
-router.all("/create-razorpay-order", async (req, res) => {
+router.all("/create-razorPay-order", async (req, res) => {
   try {
     if (req.method !== "POST") {
       return res.status(200).json({
@@ -31,7 +31,7 @@ router.all("/create-razorpay-order", async (req, res) => {
       });
     }
 
-    const order = await createRazorpayOrder(amount);
+    const order = await createrazorPayOrder(amount);
     return res.json(order);
   } catch (error) {
     console.error("RAZORPAY ORDER ERROR:", error);
@@ -52,7 +52,7 @@ router.post("/place-order", async (req, res) => {
       addons = [],
       total,
       paymentMode,
-      razorpayPayment,
+      razorPayPayment,
       freePRBox,
       coupon,
       discount
@@ -73,7 +73,7 @@ router.post("/place-order", async (req, res) => {
     }
 
     if (paymentMode !== "COD") {
-      const verified = verifyRazorpayPayment(razorpayPayment);
+      const verified = verifyrazorPayPayment(razorpayPayment);
 
       if (!verified) {
         return res.status(400).json({
@@ -93,7 +93,7 @@ router.post("/place-order", async (req, res) => {
       total,
       paymentMode,
       paymentStatus: paymentMode === "COD" ? "COD_PENDING" : "PAID",
-      razorpayPayment: razorpayPayment || {},
+      razorPayPayment: razorPayPayment || {},
       freePRBox,
       coupon,
       discount,
