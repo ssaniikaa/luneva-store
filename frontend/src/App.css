@@ -1,0 +1,367 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #fffaf3;
+  color: #2d241f;
+}
+
+.navbar {
+  height: 80px;
+  padding: 0 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffaf3;
+  border-bottom: 1px solid #ead8c5;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #9b6a42;
+}
+
+.navLinks button,
+.hero button,
+.productCard button,
+.cartPage button,
+.checkoutPage button {
+  border: none;
+  background: #9b6a42;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.navLinks {
+  display: flex;
+  gap: 15px;
+}
+
+.hero {
+  padding: 90px 7%;
+  text-align: center;
+  background: linear-gradient(135deg, #fffaf3, #f6eadc);
+}
+
+.tag {
+  color: #9b6a42;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-size: 54px;
+  max-width: 850px;
+  margin: 20px auto;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.products {
+  padding: 70px 7%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.productCard {
+  background: white;
+  border: 1px solid #ead8c5;
+  border-radius: 28px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 18px 40px rgba(90, 60, 30, 0.08);
+}
+
+.productImage {
+  height: 230px;
+  background: #f8efe4;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productImage img {
+  max-height: 210px;
+  max-width: 90%;
+}
+
+.productCard h3 {
+  color: #7d5638;
+}
+
+.cartPage,
+.checkoutPage {
+  padding: 70px 7%;
+}
+
+.cartItem {
+  max-width: 700px;
+  background: white;
+  margin: 15px 0;
+  padding: 20px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ead8c5;
+}
+
+.checkoutForm {
+  max-width: 600px;
+  display: grid;
+  gap: 15px;
+}
+
+.checkoutForm input {
+  padding: 15px;
+  border-radius: 14px;
+  border: 1px solid #d8c0a8;
+  font-size: 15px;
+}
+
+@media (max-width: 900px) {
+  .products {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+  }
+}
+
+.bundleSub {
+  max-width: 720px;
+  margin: -15px auto 42px;
+  color: #725f51;
+  line-height: 1.7;
+}
+
+.threeKits {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
+}
+
+.bundleCard {
+  position: relative;
+}
+
+.premiumBundle {
+  transform: scale(1.06);
+  background:
+    radial-gradient(circle at top, rgba(255, 226, 174, 0.5), transparent 35%),
+    linear-gradient(145deg, #2b211b, #6f462b 55%, #c69b6d);
+  color: white;
+  border: 1px solid rgba(255, 218, 163, 0.65);
+  box-shadow:
+    0 0 0 1px rgba(255, 218, 163, 0.35),
+    0 35px 90px rgba(99, 55, 20, 0.38),
+    0 0 55px rgba(198, 155, 109, 0.38);
+  animation: premiumGlow 2.4s infinite alternate ease-in-out;
+}
+
+@keyframes premiumGlow {
+  from {
+    box-shadow:
+      0 0 0 1px rgba(255, 218, 163, 0.25),
+      0 30px 70px rgba(99, 55, 20, 0.28),
+      0 0 30px rgba(198, 155, 109, 0.25);
+  }
+
+  to {
+    box-shadow:
+      0 0 0 1px rgba(255, 218, 163, 0.75),
+      0 45px 100px rgba(99, 55, 20, 0.45),
+      0 0 75px rgba(255, 205, 133, 0.55);
+  }
+}
+
+.premiumBundle h3,
+.premiumBundle p,
+.premiumBundle small {
+  color: white;
+}
+
+.premiumBundle .bundleBadge {
+  background: linear-gradient(135deg, #ffe2ae, #c69b6d);
+  color: #2b211b;
+}
+
+.bundleBadge {
+  display: inline-block;
+  background: #8b5e3c;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+
+.liveBadge {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  background: #ffefe0;
+  color: #6f462b;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  animation: pulseBadge 1.2s infinite;
+}
+
+@keyframes pulseBadge {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.bundleItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+  margin: 22px 0;
+}
+
+.bundleItems span {
+  background: rgba(255, 255, 255, 0.65);
+  color: #7b5134;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.premiumBundle .bundleItems span {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff7ec;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
+.bundlePrice {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.bundlePrice del {
+  color: #9c8a7b;
+}
+
+.premiumBundle .bundlePrice del {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.bundlePrice strong {
+  font-size: 34px;
+  color: #2f241d;
+}
+
+.premiumBundle .bundlePrice strong {
+  color: #ffe2ae;
+}
+
+.saveLine {
+  font-weight: 900;
+  color: #0f7b4f !important;
+  margin-top: 8px;
+}
+
+.premiumBundle .saveLine {
+  color: #ffe2ae !important;
+}
+
+.stockLine {
+  font-size: 13px;
+  font-weight: 800;
+  color: #9b5b37 !important;
+}
+
+.premiumBundle .stockLine {
+  color: #fff2df !important;
+}
+
+.urgencyBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 18px 0;
+}
+
+.urgencyBar div {
+  height: 100%;
+  width: 72%;
+  background: linear-gradient(90deg, #ffe2ae, #ffffff, #c69b6d);
+  border-radius: 999px;
+  animation: urgencyMove 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes urgencyMove {
+  from {
+    width: 48%;
+  }
+
+  to {
+    width: 82%;
+  }
+}
+
+.whatsappBtn {
+  display: block;
+  margin-top: 13px;
+  padding: 13px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 900;
+  color: #0f7b4f;
+  background: #eafff3;
+  border: 1px solid rgba(15, 123, 79, 0.2);
+}
+
+.premiumBundle .whatsappBtn {
+  background: #ffffff;
+  color: #0f7b4f;
+}
+
+.premiumBundle button {
+  background: linear-gradient(135deg, #ffe2ae, #ffffff);
+  color: #4d2e1d;
+}
+
+@media (max-width: 1000px) {
+  .threeKits {
+    grid-template-columns: 1fr;
+  }
+
+  .premiumBundle {
+    transform: scale(1);
+  }
+}
