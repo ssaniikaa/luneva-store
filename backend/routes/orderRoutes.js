@@ -3,7 +3,7 @@ import Order from "../models/Order.js";
 import {
   createRazorpayOrder,
   verifyRazorpayPayment
-} from "../services/razorpayService.js";
+} from "../services/razorPayService.js";
 import {
   createShiprocketOrder,
   assignShiprocketAWB
@@ -167,6 +167,6 @@ router.post("/place-order", async (req, res) => {
   }
 });
 
-export default router;git add .
-git commit -m "fix razorpay order route"
+export default router;git add.
+git commit - m "fix razorpay order route"
 git push
