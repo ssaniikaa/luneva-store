@@ -80,7 +80,7 @@ export default function Checkout({ cart }) {
         if (!validateForm()) return;
 
         try {
-            const orderRes = await fetch("http://localhost:5000/api/create-razorpay-order", {
+            const orderRes = await fetch("http://import.meta.env.VITE_API_URL/api/create-razorpay-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -99,7 +99,7 @@ export default function Checkout({ cart }) {
                 order_id: order.id,
 
                 handler: async function (response) {
-                    await fetch("http://localhost:5000/api/place-order", {
+                    await fetch("http://import.meta.env.VITE_API_URL/api/place-order", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -147,7 +147,7 @@ export default function Checkout({ cart }) {
         if (!validateForm()) return;
 
         try {
-            await fetch("http://localhost:5000/api/place-order", {
+            await fetch("http://import.meta.env.VITE_API_URL/api/place-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

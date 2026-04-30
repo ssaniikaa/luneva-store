@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function Admin({ setPage }) {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.VITE_API_URL || "http://import.meta.env.VITE_API_URL";
 
     const [stats, setStats] = useState(null);
     const [tab, setTab] = useState("orders");

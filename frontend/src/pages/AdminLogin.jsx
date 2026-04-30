@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function AdminLogin({ setPage }) {
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const API_URL = import.meta.env.VITE_API_URL || "http://import.meta.env.VITE_API_URL";
 
     const [form, setForm] = useState({
         email: "",

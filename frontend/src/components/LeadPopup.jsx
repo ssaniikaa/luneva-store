@@ -48,7 +48,7 @@ export default function LeadPopup() {
 
     try {
       // 🔹 Save in your backend
-      await fetch("http://localhost:5000/api/leads", {
+      await fetch("http://import.meta.env.VITE_API_URL/api/leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
