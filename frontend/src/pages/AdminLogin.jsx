@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 export default function AdminLogin({ setPage }) {
-    const API_URL = import.meta.env.VITE_API_URL || "http://import.meta.env.VITE_API_URL";
+
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const [form, setForm] = useState({
         email: "",
@@ -9,21 +10,26 @@ export default function AdminLogin({ setPage }) {
     });
 
     const login = async () => {
-        const res = await fetch(`${API_URL}/api/admin/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(form)
-        });
+        try {
+            const res = await fetch(`${API_URL}/api/admin/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(form)
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (data.success) {
-            localStorage.setItem("lunevaAdminToken", data.token);
-            setPage("admin");
-        } else {
-            alert("Wrong email or password");
+            if (data.success) {
+                localStorage.setItem("lunevaAdminToken", data.token);
+                setPage("admin");
+            } else {
+                alert("Wrong email or password");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Server error. Check backend.");
         }
     };
 
@@ -47,7 +53,6 @@ export default function AdminLogin({ setPage }) {
                 />
 
                 <button onClick={login}>Login to Dashboard</button>
-
             </div>
         </section>
     );
