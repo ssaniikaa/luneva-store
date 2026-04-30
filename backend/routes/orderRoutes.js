@@ -13,8 +13,15 @@ import { sendInvoiceEmail } from "../services/emailService.js";
 
 const router = express.Router();
 
-router.post("/create-razorpay-order", async (req, res) => {
+router.all("/create-razorpay-order", async (req, res) => {
   try {
+    if (req.method !== "POST") {
+      return res.status(200).json({
+        success: true,
+        message: "Razorpay endpoint working. Use POST request."
+      });
+    }
+
     const { amount } = req.body;
 
     if (!amount || amount <= 0) {
@@ -25,9 +32,11 @@ router.post("/create-razorpay-order", async (req, res) => {
     }
 
     const order = await createRazorpayOrder(amount);
-    res.json(order);
+    return res.json(order);
   } catch (error) {
-    res.status(500).json({
+    console.error("RAZORPAY ORDER ERROR:", error);
+
+    return res.status(500).json({
       success: false,
       message: "Razorpay order failed",
       error: error.message
@@ -138,7 +147,7 @@ router.post("/place-order", async (req, res) => {
 
     await sendInvoiceEmail(savedOrder, invoicePath);
 
-    res.json({
+    return res.json({
       success: true,
       message: "Order placed successfully",
       orderId: savedOrder.orderId,
@@ -150,7 +159,7 @@ router.post("/place-order", async (req, res) => {
       total: savedOrder.total
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Order failed",
       error: error.response?.data || error.message
@@ -158,4 +167,6 @@ router.post("/place-order", async (req, res) => {
   }
 });
 
-export default router;
+export default router;git add .
+git commit -m "fix razorpay order route"
+git push
