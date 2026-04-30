@@ -34,12 +34,19 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/tracking", trackingRoutes);
 
 // GLOBAL ERROR HANDLER
-app.use((err, req, res, next) => {
-  console.error("GLOBAL ERROR:", err);
-  res.status(500).json({ error: err.message });
-});
+app.use(cors({
+  origin: [
+    "https://luneva.co.in",
+    "https://www.luneva.co.in",
+    "https://cute-tapioca-90bf33.netlify.app",
+    "https://69f348241c461b3e00bd6d9c--cute-tapioca-90bf33.netlify.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

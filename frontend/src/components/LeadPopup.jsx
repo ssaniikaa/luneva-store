@@ -48,7 +48,7 @@ export default function LeadPopup() {
 
     try {
       // 🔹 Save in your backend
-      await fetch("http://import.meta.env.VITE_API_URL/api/leads", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -57,14 +57,14 @@ export default function LeadPopup() {
       });
 
       // 🔹 Save in Google Sheet
-      await fetch(GOOGLE_SHEET_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(leadData)
-      });
+      //await fetch(GOOGLE_SHEET_URL, {
+      //method: "POST",
+      //mode: "no-cors",
+      //headers: {
+      //"Content-Type": "application/json"
+      //},
+      //body: JSON.stringify(leadData)
+      //});
 
       // 🔹 Activate coupon
       localStorage.setItem("lunevaCoupon", code);
