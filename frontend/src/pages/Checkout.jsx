@@ -80,7 +80,9 @@ export default function Checkout({ cart }) {
         if (!validateForm()) return;
 
         try {
-            const orderRes = await fetch("http://import.meta.env.VITE_API_URL/api/create-razorpay-order", {
+            const API_URL = import.meta.env.VITE_API_URL;
+
+            const orderRes = await fetch(`${API_URL}/api/orders/create-razorpay-order`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -99,7 +101,7 @@ export default function Checkout({ cart }) {
                 order_id: order.id,
 
                 handler: async function (response) {
-                    await fetch("http://import.meta.env.VITE_API_URL/api/place-order", {
+                    await fetch(`${API_URL}/api/orders/place-order`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -117,11 +119,7 @@ export default function Checkout({ cart }) {
                         })
                     });
 
-                    alert(
-                        getsPRBox
-                            ? "Payment successful! Your order includes the FREE Signature PR Box ✨"
-                            : "Payment successful! Your LUNÉVA order is placed ✨"
-                    );
+                    alert("Payment successful! ✨");
                 },
 
                 prefill: {
@@ -137,41 +135,37 @@ export default function Checkout({ cart }) {
 
             const razorpay = new window.Razorpay(options);
             razorpay.open();
+
         } catch (error) {
             alert("Something went wrong while processing payment.");
             console.error(error);
         }
     };
 
-    const whatsappOrder = async () => {
-        if (!validateForm()) return;
+    const API_URL = import.meta.env.VITE_API_URL;
 
-        try {
-            await fetch("http://import.meta.env.VITE_API_URL/api/place-order", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    customer: form,
-                    products: cart,
-                    addons: selectedAddons,
-                    total,
-                    paymentMode: "COD",
-                    freePRBox: getsPRBox,
-                    coupon: couponActive ? coupon : null,
-                    discount
-                })
-            });
-        } catch (error) {
-            console.error(error);
-        }
+    await fetch(`${API_URL}/api/orders/place-order`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            customer: form,
+            products: cart,
+            addons: selectedAddons,
+            total,
+            paymentMode: "COD",
+            freePRBox: getsPRBox,
+            coupon: couponActive ? coupon : null,
+            discount
+        })
+    });
 
-        const orderItems = cart.map((item) => item.name).join(", ");
-        const addonItems = selectedAddons.map((item) => item.name).join(", ");
+    const orderItems = cart.map((item) => item.name).join(", ");
+    const addonItems = selectedAddons.map((item) => item.name).join(", ");
 
-        const message = encodeURIComponent(
-            `Hi LUNÉVA ✨
+    const message = encodeURIComponent(
+        `Hi LUNÉVA ✨
 
 I want to place this order:
 
@@ -193,158 +187,158 @@ Phone: ${form.phone}
 Address: ${form.address}, ${form.city}, ${form.state} - ${form.pincode}
 
 Please confirm my order.`
-        );
-
-        window.open(`https://wa.me/919136797849?text=${message}`, "_blank");
-    };
-
-    return (
-        <section className="checkoutPage premiumCheckout">
-            <div className="checkoutHeader">
-                <p className="tag">Secure Checkout</p>
-                <h1>Complete Your LUNÉVA Ritual</h1>
-                <p>
-                    Add glow boosters and unlock the Signature Premium PR Box on orders
-                    above ₹3,999.
-                </p>
-            </div>
-
-            <div className="checkoutLayout">
-                <div className="checkoutLeft">
-                    <div className="checkoutCard">
-                        <h2>Delivery Details</h2>
-
-                        <div className="checkoutForm">
-                            <input name="name" placeholder="Full Name *" value={form.name} onChange={handleChange} />
-                            <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-                            <input name="phone" placeholder="Phone Number *" value={form.phone} onChange={handleChange} />
-                            <input name="address" placeholder="Full Address *" value={form.address} onChange={handleChange} />
-                            <input name="city" placeholder="City *" value={form.city} onChange={handleChange} />
-                            <input name="state" placeholder="State *" value={form.state} onChange={handleChange} />
-                            <input name="pincode" placeholder="Pincode *" value={form.pincode} onChange={handleChange} />
-
-                            <select name="paymentMode" value={form.paymentMode} onChange={handleChange}>
-                                <option value="Prepaid">Prepaid - Razorpay</option>
-                                <option value="COD">Cash on Delivery</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="checkoutCard">
-                        <h2>Add Glow Boosters</h2>
-                        <p className="addonSub">
-                            Customers who add boosters usually complete a better routine.
-                        </p>
-
-                        <div className="addonGrid">
-                            {addons.map((addon) => {
-                                const selected = selectedAddons.find((item) => item.id === addon.id);
-
-                                return (
-                                    <div
-                                        className={`addonCard ${selected ? "addonSelected" : ""}`}
-                                        key={addon.id}
-                                        onClick={() => toggleAddon(addon)}
-                                    >
-                                        <div>
-                                            <h3>{addon.name}</h3>
-                                            <p>Perfect add-on for your LUNÉVA ritual.</p>
-                                        </div>
-
-                                        <strong>₹{addon.price}</strong>
-                                        <button type="button">{selected ? "Added" : "Add"}</button>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="checkoutRight">
-                    <div className="prBoxCard">
-                        <span>Signature Reward</span>
-                        <h2>Premium PR Box</h2>
-                        <p>
-                            Get LUNÉVA’s signature-style premium PR box free on orders of
-                            ₹3,999 and above.
-                        </p>
-
-                        {getsPRBox ? (
-                            <strong className="unlocked">Unlocked 🎁</strong>
-                        ) : (
-                            <strong className="locked">Add ₹{amountNeeded} more to unlock</strong>
-                        )}
-
-                        <div className="progressTrack">
-                            <div style={{ width: `${Math.min((total / 3999) * 100, 100)}%` }}></div>
-                        </div>
-
-                        {!getsPRBox && (
-                            <>
-                                <p className="almostText">
-                                    Almost there… most customers add 1 item to unlock this 🎁
-                                </p>
-
-                                <button className="unlockBtn" onClick={addSerumToUnlock}>
-                                    Add Serum & Unlock PR Box
-                                </button>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="orderSummaryBox">
-                        <h2>Order Summary</h2>
-
-                        <div className="summaryMini">
-                            <span>Products</span>
-                            <strong>₹{cartTotal}</strong>
-                        </div>
-
-                        <div className="summaryMini">
-                            <span>Add-ons</span>
-                            <strong>₹{addonTotal}</strong>
-                        </div>
-
-                        {couponActive && (
-                            <div className="summaryMini giftLine">
-                                <span>Launch Offer ({coupon})</span>
-                                <strong>-₹{discount}</strong>
-                            </div>
-                        )}
-
-                        <div className="summaryMini">
-                            <span>Shipping</span>
-                            <strong>Free</strong>
-                        </div>
-
-                        {getsPRBox && (
-                            <div className="summaryMini giftLine">
-                                <span>Signature PR Box</span>
-                                <strong>FREE</strong>
-                            </div>
-                        )}
-
-                        <div className="checkoutTotal">
-                            <span>Total</span>
-                            <strong>₹{total}</strong>
-                        </div>
-
-                        {form.paymentMode === "Prepaid" ? (
-                            <button onClick={payNow}>Pay Securely with Razorpay</button>
-                        ) : (
-                            <button onClick={whatsappOrder}>Confirm COD on WhatsApp</button>
-                        )}
-
-                        <button className="whatsappCheckout" onClick={whatsappOrder}>
-                            Order on WhatsApp
-                        </button>
-
-                        <p className="checkoutTrust">
-                            ✔ Secure payment · ✔ COD available · ✔ Fast delivery · ✔ WhatsApp support
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
     );
+
+    window.open(`https://wa.me/919136797849?text=${message}`, "_blank");
+};
+
+return (
+    <section className="checkoutPage premiumCheckout">
+        <div className="checkoutHeader">
+            <p className="tag">Secure Checkout</p>
+            <h1>Complete Your LUNÉVA Ritual</h1>
+            <p>
+                Add glow boosters and unlock the Signature Premium PR Box on orders
+                above ₹3,999.
+            </p>
+        </div>
+
+        <div className="checkoutLayout">
+            <div className="checkoutLeft">
+                <div className="checkoutCard">
+                    <h2>Delivery Details</h2>
+
+                    <div className="checkoutForm">
+                        <input name="name" placeholder="Full Name *" value={form.name} onChange={handleChange} />
+                        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+                        <input name="phone" placeholder="Phone Number *" value={form.phone} onChange={handleChange} />
+                        <input name="address" placeholder="Full Address *" value={form.address} onChange={handleChange} />
+                        <input name="city" placeholder="City *" value={form.city} onChange={handleChange} />
+                        <input name="state" placeholder="State *" value={form.state} onChange={handleChange} />
+                        <input name="pincode" placeholder="Pincode *" value={form.pincode} onChange={handleChange} />
+
+                        <select name="paymentMode" value={form.paymentMode} onChange={handleChange}>
+                            <option value="Prepaid">Prepaid - Razorpay</option>
+                            <option value="COD">Cash on Delivery</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="checkoutCard">
+                    <h2>Add Glow Boosters</h2>
+                    <p className="addonSub">
+                        Customers who add boosters usually complete a better routine.
+                    </p>
+
+                    <div className="addonGrid">
+                        {addons.map((addon) => {
+                            const selected = selectedAddons.find((item) => item.id === addon.id);
+
+                            return (
+                                <div
+                                    className={`addonCard ${selected ? "addonSelected" : ""}`}
+                                    key={addon.id}
+                                    onClick={() => toggleAddon(addon)}
+                                >
+                                    <div>
+                                        <h3>{addon.name}</h3>
+                                        <p>Perfect add-on for your LUNÉVA ritual.</p>
+                                    </div>
+
+                                    <strong>₹{addon.price}</strong>
+                                    <button type="button">{selected ? "Added" : "Add"}</button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            <div className="checkoutRight">
+                <div className="prBoxCard">
+                    <span>Signature Reward</span>
+                    <h2>Premium PR Box</h2>
+                    <p>
+                        Get LUNÉVA’s signature-style premium PR box free on orders of
+                        ₹3,999 and above.
+                    </p>
+
+                    {getsPRBox ? (
+                        <strong className="unlocked">Unlocked 🎁</strong>
+                    ) : (
+                        <strong className="locked">Add ₹{amountNeeded} more to unlock</strong>
+                    )}
+
+                    <div className="progressTrack">
+                        <div style={{ width: `${Math.min((total / 3999) * 100, 100)}%` }}></div>
+                    </div>
+
+                    {!getsPRBox && (
+                        <>
+                            <p className="almostText">
+                                Almost there… most customers add 1 item to unlock this 🎁
+                            </p>
+
+                            <button className="unlockBtn" onClick={addSerumToUnlock}>
+                                Add Serum & Unlock PR Box
+                            </button>
+                        </>
+                    )}
+                </div>
+
+                <div className="orderSummaryBox">
+                    <h2>Order Summary</h2>
+
+                    <div className="summaryMini">
+                        <span>Products</span>
+                        <strong>₹{cartTotal}</strong>
+                    </div>
+
+                    <div className="summaryMini">
+                        <span>Add-ons</span>
+                        <strong>₹{addonTotal}</strong>
+                    </div>
+
+                    {couponActive && (
+                        <div className="summaryMini giftLine">
+                            <span>Launch Offer ({coupon})</span>
+                            <strong>-₹{discount}</strong>
+                        </div>
+                    )}
+
+                    <div className="summaryMini">
+                        <span>Shipping</span>
+                        <strong>Free</strong>
+                    </div>
+
+                    {getsPRBox && (
+                        <div className="summaryMini giftLine">
+                            <span>Signature PR Box</span>
+                            <strong>FREE</strong>
+                        </div>
+                    )}
+
+                    <div className="checkoutTotal">
+                        <span>Total</span>
+                        <strong>₹{total}</strong>
+                    </div>
+
+                    {form.paymentMode === "Prepaid" ? (
+                        <button onClick={payNow}>Pay Securely with Razorpay</button>
+                    ) : (
+                        <button onClick={whatsappOrder}>Confirm COD on WhatsApp</button>
+                    )}
+
+                    <button className="whatsappCheckout" onClick={whatsappOrder}>
+                        Order on WhatsApp
+                    </button>
+
+                    <p className="checkoutTrust">
+                        ✔ Secure payment · ✔ COD available · ✔ Fast delivery · ✔ WhatsApp support
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+);
 }
