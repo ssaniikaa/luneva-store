@@ -167,6 +167,4 @@ router.post("/place-order", async (req, res) => {
   }
 });
 
-export default router;git add.
-git commit - m "fix razorpay order route"
-git push
+export default router;
